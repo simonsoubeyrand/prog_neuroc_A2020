@@ -1,0 +1,3 @@
+In this task, you will be presented with a series of faces in the centre of the screen. On each trial a single face is depicted on the screen. 
+Please press the keyboard key Q if you think that the face shown is a child's face, or the keyboard key P if you think that the face shown is an adult's face.
+Sometimes it will be difficult to decide whether the face shown is a child's or an adult's face. But we still need you to try your best and come up with an answer as quickly and accurately as possible. Importantly, you need to keep fixating at the centre of the screen while you pay attention to the pictures. Press the spacebar to start the experiment.
