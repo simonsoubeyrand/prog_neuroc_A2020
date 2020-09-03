@@ -1,17 +1,17 @@
-Cette tâche devrait durée environ 30 min.
+Cette tache devrait durer environ 30 min.
 
-Vous verrez des photos dégradées de visages souriants, fâchés, neutres et 
-affolés. Votre tâche consistera à indiquer les émotions des 
-visages qui vous seront présentés.
+Vous verrez des photos degradees de visages souriants, fachas, neutres et 
+affoles. Votre tache consistera a indiquer les emotions des 
+visages qui vous seront presentes.
 
 La touche a  indique un visage souriant (joie).
 
-La touche s indique un visage affolé (peur)
+La touche s indique un visage affole (peur)
 
-La touche d indique un visage fâché (colere)
+La touche d indique un visage fache (colere)
 
 La touche f indique un visage neutre.
 
-Répondez le plus rapidement possible sans trop faire d?erreur.
+Repondez le plus rapidement possible sans trop faire d'erreur.
 
 Bonne chance!
