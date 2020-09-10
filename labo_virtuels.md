@@ -7,7 +7,7 @@ https://fas.umontreal.ca/laboratoires/laboratoires-marie-victorin/laboratoires-v
 ##  1 - connection au vpn
 
 
-### linux
+### linux instructions
 sudo openconnect -b --protocol=nc --user=p1006880 https://vpn.umontreal.ca
 
 
