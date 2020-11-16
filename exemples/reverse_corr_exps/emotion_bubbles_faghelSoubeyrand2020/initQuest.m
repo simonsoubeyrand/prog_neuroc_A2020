@@ -1,1 +1,0 @@
-function q = initQuest(tGuess, pThreshold)tGuessSd=0.10; % sd of Gaussian before clipping to specified rangebeta=3.5;delta=0.01;gamma=0.25;q=QuestCreate(tGuess,tGuessSd,pThreshold,beta,delta,gamma);
