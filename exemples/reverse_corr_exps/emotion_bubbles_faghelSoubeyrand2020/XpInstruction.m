@@ -17,7 +17,6 @@ screenNumber=max(screens);
 %  Center coordinates
 [xCenter,yCenter]   = RectCenter(wRect);
 
-%
 % % Open window with default settings:
 % w=Screen('OpenWindow', screenNumber,128);
 % Select specific text font, style and size:
