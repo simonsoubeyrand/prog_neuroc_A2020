@@ -19,8 +19,11 @@ data_temp = eeg_subjects{condition};
 
 size_data = size(data_temp) % 32 sujets x 128 electrodes x 333 time samples
 
-% % % this will only work if you have FieldTrip Toolbox (analysis for
+%% % % this will only work if you have FieldTrip Toolbox (analysis for
 % M/EEG) installed.
+addpath(fullfile('/home/adf/faghelss/Documents/TOOLBOXES/fieldtrip-20190419'));
+ft_defaults % initialize field trip paths and functions
+
 tmpcfg.layout=[];
 tmpcfg.layout = 'biosemi128.lay';
 lay = ft_prepare_layout(tmpcfg);
@@ -57,10 +60,10 @@ histogram(data_roi{2},50)...
 %% Inspection des donnees : boxplot, differences stats, et plot
 % on va maintenant inspecter avec certaines stats descriptives de la distribution, e.g.
 % moyennes ,medianes, percentiles..
-boxplot([data_roi{1}(:) data_roi{2}(:)],{'occipitales','frontales'},'plotstyle','compact','colors',[0 0 0])
+figure,boxplot([data_roi{1}(:) data_roi{2}(:)],{'occipitales','frontales'},'plotstyle','compact','colors',[0 0 0])
 
 % si on voulait comparer les distribution, on pourrait utiliser un ttest:
-[H,P,CI,STATS] = ttest(data_roi{1}(:), data_roi{2}(:))
+[H,P,~,STATS] = ttest(data_roi{1}(:), data_roi{2}(:))
 
 %% Pas tres interessant par contre. L'EEG est une technique d'imagerie
 % plutot dynamique, avec une resolution temporelle tres fine. Voyons voir
@@ -99,15 +102,15 @@ electrodes_choisies=ROIs.LeftOcc;
 data_roi{3}=squeeze(nanmean(eeg_subjects{1}(gr==1,electrodes_choisies,:),2));
 data_roi{4}=squeeze(nanmean(eeg_subjects{1}(gr==0,electrodes_choisies,:),2));
 
-color_palette=viridis;
+color_palette=parula;
 
-figure, plot(time,mean(data_roi{1}),'-b','Color',color_palette(100,:),'LineWidth',2),xlabel('temps (sec)'),ylabel('mV'),title('ERP pour visage, en fonction du groupe')
+figure, plot(time,mean(data_roi{1}),'-b','Color',color_palette(20,:),'LineWidth',2),xlabel('temps (sec)'),ylabel('mV'),title('ERP pour visage, en fonction du groupe')
 hold on
-plot(time,mean(data_roi{3}),'--b','Color',color_palette(100,:),'LineWidth',2)
+plot(time,mean(data_roi{3}),'--b','Color',color_palette(20,:),'LineWidth',2)
 hold on
-plot(time,mean(data_roi{2}),'-k','Color',color_palette(150,:),'LineWidth',2)
+plot(time,mean(data_roi{2}),'-k','Color',color_palette(30,:),'LineWidth',2)
 hold on
-plot(time,mean(data_roi{4}),'--k','Color',color_palette(150,:),'LineWidth',2)
+plot(time,mean(data_roi{4}),'--k','Color',color_palette(30,:),'LineWidth',2)
 set(gcf,'Position',[100 100 1400 600], 'Color', 'w') % on choist la position et la Taille de la figure.
 legend({'group 1: right-hemisph','group 1 : left-hemisph','group 2 : right-hemisph','group 2 : left-hemisph'})
 
@@ -134,7 +137,7 @@ data_brainrep{cond}=squeeze(mean(eeg_subjects{cond}(:,:,time_window)));
 end
 
 % plot en 2D (imagesc)
-figure, imagesc(data_brainrep{1}),colormap(jet),ylabel('electrodes'),xlabel('time (sec)')
+figure, imagesc(data_brainrep{1}),colormap(jet),ylabel('electrodes'),xlabel('time (sec)'),colorbar
 set(gca,'XTick',30:50:333,'XTickLabel',round(time(30:50:333),2))
 
 % plot en 3D (surf plot..)
@@ -161,7 +164,7 @@ figure,
 tmp_topo=squeeze(mean(data_brainrep{1}(:,time_window),2));
 
 ft_plot_topo(chan_pos(:,1),chan_pos(:,2),tmp_topo,'mask',lay.mask,'outline',lay.outline,'interplim','mask','isolines',[8]);%'clim',[-.5 .9],'isolines',[3]);%'clim',[-7 3]
-colormap(viridis),axis('square'),axis off,h=colorbar,set(get(h,'label'),'string','uV'),title('EEG topography')
+colormap(parula),axis('square'),axis off,h=colorbar,set(get(h,'label'),'string','uV'),title('EEG topography')
 set(gca,'XTick',[],'YTick',[])
 set(gca,'color','none')
 set(gcf,'Position',[100 100 900 900], 'Color', 'w')
@@ -196,11 +199,11 @@ scatter(data_brainrep{4}(:),data_brainrep{3}(:),'filled'),title(sprintf(' correl
 
 %%
 hold off
-color_palette=plasma;
+color_palette=hot;
 color_electrodes=zeros(128,3);
-color_electrodes(ROIs.RightOcc,:)=repmat(squeeze(color_palette(200,:)),numel(ROIs.RightOcc),1,1);
-color_electrodes(ROIs.LeftOcc,:)=repmat(squeeze(color_palette(100,:)),numel(ROIs.LeftOcc),1,1);
-color_electrodes(ROIs.CentralOcc,:)=repmat(squeeze(color_palette(50,:)),numel(ROIs.CentroFront),1,1);
+color_electrodes(ROIs.RightOcc,:)=repmat(squeeze(color_palette(40,:)),numel(ROIs.RightOcc),1,1);
+color_electrodes(ROIs.LeftOcc,:)=repmat(squeeze(color_palette(20,:)),numel(ROIs.LeftOcc),1,1);
+color_electrodes(ROIs.CentralOcc,:)=repmat(squeeze(color_palette(10,:)),numel(ROIs.CentroFront),1,1);
 
 figure,
 h=scatter(data_brainrep{1}(:),data_brainrep{2}(:),'filled'),... % on ajoute lsline pour voir la droite des moindres carres (pente de correlation)
@@ -224,27 +227,3 @@ tmp(eye(32)==1)=0;
 
 corr_intersujets=mean(tmp);
 anova1(corr_intersujets(:),gr(:))
-
-%% show topographies
-for cond=1:4
-    figure,
-    set(gcf,'Position',[100 100 900 300], 'Color', 'w')
-    for t=1:4
-        this_time=these_times{t};
-        ts=time(these_times{t});
-        
-        tmp_topo=squeeze(mean(all_topo{1}(:,cond,t,:)));
-        subplot(2,4,t), ft_plot_topo(chan_pos(:,1),chan_pos(:,2),tmp_topo,'mask',lay.mask,'outline',lay.outline,'interplim','mask','clim',[-7 14]);%,'isolines',[3]);%'clim',[-7 3]
-        colormap(viridis),axis('square'), title(sprintf('%3.0f-%3.0f ms',round(ts(1),2)*1000,round(ts(end),2)*1000)),axis off,h=colorbar,set(get(h,'label'),'string','uV'),title(which_conds_labels{cond})
-        set(gca,'XTick',[],'YTick',[])
-        set(gca,'color','none')
-        tmp_topo=squeeze(mean(all_topo{2}(:,cond,t,:)));
-        subplot(2,4,t+4), ft_plot_topo(chan_pos(:,1),chan_pos(:,2),tmp_topo,'mask',lay.mask,'outline',lay.outline,'interplim','mask','clim',[-7 14]);%,'isolines',[3]);%'clim',[-7 3]
-        colormap(viridis),axis('square'), title(sprintf('%3.0f-%3.0f ms',round(ts(1),2)*1000,round(ts(end),2)*1000)),axis off,h=colorbar,set(get(h,'label'),'string','uV');
-        set(gca,'XTick',[],'YTick',[])
-        set(gca,'color','none')
-    end
-end
-
-
-
